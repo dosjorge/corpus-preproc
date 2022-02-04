@@ -1,0 +1,69 @@
+---
+name: "pull"
+on: [ pull_request ]
+jobs:
+  check:
+    name: "Run on Ubuntu"
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 10
+      -
+        name: "Validate commit messages"
+        run: |
+          git show-ref
+          curl -sSfL https://github.com/convco/convco/releases/latest/download/convco-ubuntu.zip | zcat > convco
+          chmod +x convco
+          ./convco check ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}
+          rm convco
+      -
+        name: "Install stable toolchain"
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+      -
+        name: "Run cargo fmt"
+        uses: actions-rs/cargo@v1
+        with:
+          args: "--all -- --check"
+          command: fmt
+      -
+        name: "Run tests"
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+  matrix-check:
+    name: "Run on macOS and Windows"
+    runs-on: "${{ matrix.os }}-latest"
+    steps:
+      -
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 10
+      -
+        name: "Install stable toolchain"
+        uses: actions-rs/toolchain@v1
+        with:
+          override: true
+          profile: minimal
+          toolchain: stable
+      -
+        name: "Test on ${{ matrix.os }}"
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+    strategy:
+      matrix:
+        include:
+          -
+            binary: "${{ github.event.repository.name }}"
+            os: macos
+          -
+            binary: "${{ github.event.repository.name }}.exe"
+            os: windows
+        os:
+          - windows
+          - macos

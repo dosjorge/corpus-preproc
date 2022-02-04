@@ -1,0 +1,77 @@
+---
+name: "build"
+on:
+  push:
+    tags:
+      - v*.*.*
+jobs:
+  build:
+    name: Build
+    runs-on: "${{ matrix.os }}-latest"
+    steps:
+      -
+        uses: actions/checkout@v2
+      -
+        name: "Install stable toolchain"
+        uses: actions-rs/toolchain@v1
+        with:
+          default: true
+          profile: minimal
+          toolchain: stable
+      -
+        name: "Test on ${{ matrix.os }}"
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+      -
+        name: "Build ${{ matrix.os }} binary"
+        uses: actions-rs/cargo@v1
+        with:
+          args: "--release"
+          command: build
+      -
+        name: "Move binary"
+        run: |
+          mkdir ~/artifacts/
+          mv target/release/${{ matrix.binary }} ~/artifacts/${{ matrix.artifact }}
+      -
+        name: "Upload ${{ matrix.os }} binary"
+        uses: actions/upload-artifact@v2
+        with:
+          name: "${{ matrix.artifact }}"
+          path: ~/artifacts/${{ matrix.artifact }}
+    strategy:
+      matrix:
+        include:
+          -
+            artifact: "${{ github.event.repository.name }}-ubuntu"
+            binary: "${{ github.event.repository.name }}"
+            os: ubuntu
+          -
+            artifact: "${{ github.event.repository.name }}.exe"
+            binary: "${{ github.event.repository.name }}.exe"
+            os: windows
+          -
+            artifact: "${{ github.event.repository.name }}-macos"
+            binary: "${{ github.event.repository.name }}"
+            os: macos
+        os:
+          - ubuntu
+          - windows
+          - macos
+  release:
+    name: Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: "Download build artifacts"
+        uses: actions/download-artifact@v2
+        with:
+          path: "/home/runner/artifacts/"
+      -
+        name: "Publish Release"
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "/home/runner/artifacts/*/*"
+          generate_release_notes: true
