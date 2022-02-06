@@ -1,7 +1,7 @@
 # Corpus Preprocessor
 
 [![Build binary](https://github.com/dosjorge/corpus-preproc/actions/workflows/release.yml/badge.svg)](https://github.com/dosjorge/corpus-preproc/actions/workflows/release.yml)
-![Crates.io](https://img.shields.io/crates/v/corpus-preproc)
+[![Crates.io](https://img.shields.io/crates/v/corpus-preproc)](https://crates.io/crates/corpus-preproc)
 [![DOI](https://zenodo.org/badge/456014248.svg)](https://zenodo.org/badge/latestdoi/456014248)
 
 CLI and HTTP API to preprocess corpora for word embeddings and possibly other NLP tasks. The main goal is to convert
