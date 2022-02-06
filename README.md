@@ -113,24 +113,3 @@ def clean_text(text):
 clean = clean_text("<b>HELLo, WORLD!!!").rstrip()
 assert (clean == "hello world"), "OK"
 ```
-
-## TODO
-- [ ] Normalize or remove inner word separators
-- [ ] Replace `indicatif` with `linya`
-- [ ] Export and load CLI options as JSON files
-## Wishlist
-### Speed
-- [ ] Use the efficient plain text preprocessors of `tokenizers`
-- [ ] Use a better text data structure such as `ropey` or `tendril`
-- [ ] Determine feasibility to process text as a stream instead of loading entire file buffer into memory
-  - See `lol-html` and `html5ever` issue [#149](https://github.com/servo/html5ever/issues/149)
-### Functionality
-- [ ] Implement quality control (minimum and maximum sentence length)
-- [ ] Implement pdf text extractor with `pdf-extract`
-- [ ] Implement docx/pptx/odt text extractor with `dotext` or `docx`
-- [ ] Implement stemmer with `rust-stemmers`
-- [ ] Implement sentence filtering based on desired language with `fasttext-rs` and a
-      [language identification model](https://fasttext.cc/blog/2017/10/02/blog-post.html)
-- [ ] Automatically concatenate common MWEs with `MITIE` (Rust bindings missing) or `phrase`
-### Interoperability
-- [ ] Python bindings
