@@ -11,7 +11,7 @@ many HTML or plain text files into a single normalized plain text corpus.
 ## Features
 - Parallel processing of files in a directory (CLI only)
 - Sentence segmentation with [UAX#29](https://unicode.org/reports/tr29/#Sentence_Boundaries) rules
-- NKFC and whitespace normalization
+- NFKC and whitespace normalization
 - Removal of modifiers and marks
 - Lower-case folding
 - Trimming of punctuation around words
