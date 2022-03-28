@@ -12,7 +12,7 @@ repository = "https://github.com/dosjorge/corpus-preproc"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-html5ever = "0.25.1"
+html5ever = "0.26.0"
 kuchiki = "0.8.1"
 regex = "1.5.4"
 substring = "1.4.5"
